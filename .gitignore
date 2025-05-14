@@ -3,4 +3,3 @@ config.ini
 
 # ignore the Observations data folder
 Observations/
-*.csv
