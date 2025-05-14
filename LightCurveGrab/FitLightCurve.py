@@ -6,6 +6,7 @@
 from astropy.timeseries import LombScargle
 import numpy as np
 import pandas as pd
+import sys
 
 ################################################################################
 # Constants
@@ -15,6 +16,10 @@ import pandas as pd
 ################################################################################
 # Main Program
 def main():
+
+    # get args for core number
+    cores = int(sys.argv[1])
+    core_num = int(sys.argv[2])
 
     # import data from csv file into a pandas df
     print("importing data...")
@@ -29,19 +34,19 @@ def main():
 
     # compute all results
     print("find cycle 1 results...")
-    cycle1_results_df = find_cycle_asteroids_light_curve_fit(cycle1_df, "Original_Object_ID", 1)
+    cycle1_results_df = find_cycle_asteroids_light_curve_fit(cycle1_df, "Original_Object_ID", 1, cores, core_num)
 
     print("find cycle 2 results...")
-    cycle2_results_df = find_cycle_asteroids_light_curve_fit(cycle2_df, "Object_ID", 2)
+    cycle2_results_df = find_cycle_asteroids_light_curve_fit(cycle2_df, "Object_ID", 2, cores, core_num)
 
     print("comparing cycles...")
     combine_results_df = compare_cycles(cycle1_results_df, cycle2_results_df, intersect_ids_df)
 
     # convert dataframes to csv
     print("convert results to csv files...")
-    cycle1_results_df.to_csv('cycle1_results.csv', index=False)
-    cycle2_results_df.to_csv('cycle2_results.csv', index=False)
-    combine_results_df.to_csv('combine_results.csv', index=False)
+    cycle1_results_df.to_csv(f'core{core_num}_cycle1_results.csv', index=False)
+    cycle2_results_df.to_csv(f'core{core_num}_cycle2_results.csv', index=False)
+    combine_results_df.to_csv(f'core{core_num}_combine_results.csv', index=False)
 
 
 ################################################################################
@@ -84,7 +89,7 @@ def find_asteroid_light_curve(asteroid_info):
         return [cycle_num, object_id, reduced_chi2_statistic, 
                 peak_power, best_period, amplitude, len(time_mdj)]
 
-def find_cycle_asteroids_light_curve_fit(cycle_df, id_col_name, cycle_num):
+def find_cycle_asteroids_light_curve_fit(cycle_df, id_col_name, cycle_num, cores, core_num):
 
     # initialize output df
     columns = ["cycle", "asteroid_id", "reduced_chi2", "peak_power", 
@@ -92,7 +97,7 @@ def find_cycle_asteroids_light_curve_fit(cycle_df, id_col_name, cycle_num):
     
     results_df = pd.DataFrame(columns=columns)
 
-    # count = 0
+    count = 0
 
     # group each asteroid by their object id
     asteroids = cycle_df.groupby(id_col_name)
@@ -100,16 +105,19 @@ def find_cycle_asteroids_light_curve_fit(cycle_df, id_col_name, cycle_num):
     # plot each asteroid
     for object_id, asteroid in asteroids:
 
-        asteroid_info = (asteroid, cycle_num, object_id)
+        # check specific section
+        if count % cores == core_num:
 
-        result = find_asteroid_light_curve(asteroid_info)
+            asteroid_info = (asteroid, cycle_num, object_id)
 
-        # add data to the results dataframe
-        results_df.loc[len(results_df)] = result
+            result = find_asteroid_light_curve(asteroid_info)
 
-        # count += 1
-        # if count >= 50:
-        #     break
+            # add data to the results dataframe
+            results_df.loc[len(results_df)] = result
+
+            print(count)
+
+        count += 1
 
     return results_df
 
