@@ -1,6 +1,36 @@
 ################################################################################
 # Fit Light Curve
+
+"""
+OVERVIEW:
+This program runs the main script for monsoon to get the "cycle", 
+"asteroid_id", "reduced_chi2", "peak_power", "period_(hr)", "amplitude", and 
+"num_observations" for each asteroid.
+
+IMPORTANT:
+For this program to work the researcher needs to put both csv files
+cycle1.csv and cycle2.csv in a folder called Observations. Run
+DownloadMongoDB.ipynb to get the files. You will have to manually
+put these new files in the Observations folder which will be located
+in the same folder as this file.
+"""
+
+"""
+Headers for Cycle1 DF (Northern Hemisphere):
+_id, Original_Object_ID, MDJ, Magnitude, Magnitude_Error
+
+Cycle1 Size: 28878 Asteroids
+
+Headers for Cycle2 DF (Southern Hemisphere):
+_id, Object_ID, MDJ, Magnitude, Magnitude_Error, Sector
+
+Cycle2 Size: 18712 Asteroids
+
+Overlap Size: 3025 Asteroids
+"""
+
 # Created by Group 1
+
 ################################################################################
 # Imports
 from astropy.timeseries import LombScargle
@@ -115,7 +145,7 @@ def find_cycle_asteroids_light_curve_fit(cycle_df, id_col_name, cycle_num, cores
             # add data to the results dataframe
             results_df.loc[len(results_df)] = result
 
-            print(count)
+            print(f"asteroid: {count}")
 
         count += 1
 
@@ -138,6 +168,7 @@ def compare_cycles(cycle1_df, cycle2_df, intersect_ids):
 
     columns = ["asteroid_id", "period_(hr)_1", "amplitude_1",    
                "period_(hr)_2", "amplitude_2"]
+    
     results_df = pd.DataFrame(columns=columns)
 
     intersect_ids_df = pd.DataFrame(intersect_ids, columns=["asteroid_id"])
