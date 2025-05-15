@@ -8,3 +8,9 @@ Observations/
 
 # holds the computed data returned from Monsoon
 MonsoonDataReturn/
+
+# holds the compressed data from Monsoon
+Data/
+
+# ignore all csv files
+*.csv
