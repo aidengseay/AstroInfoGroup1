@@ -3,8 +3,8 @@ template = """#!/bin/bash
 #SBATCH --output=/scratch/ags392/curve_out{n}.txt      # this is the file your output and errors go to
 #SBATCH --error=/scratch/ags392/curve_out{n}.err       # this is the file your output and errors go to
 #SBATCH --chdir=/scratch/ags392                        # your work directory
-#SBATCH --time=5:00:00                                  # (max time) 5 hrs
-#SBATCH --mem=10000                                     # (total mem) 10GB of memory
+#SBATCH --time=5:00:00                                 # (max time) 5 hrs
+#SBATCH --mem=10000                                    # (total mem) 10GB of memory
 
 module load anaconda3
 conda activate astro_info
