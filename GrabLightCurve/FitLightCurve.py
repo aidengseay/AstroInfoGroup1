@@ -56,12 +56,6 @@ def main():
     cycle1_df = pd.read_csv("Observations/cycle1.csv", low_memory=False)
     cycle2_df = pd.read_csv("Observations/cycle2.csv", low_memory=False)
 
-    # get the ids that intersect
-    print("finding intersecting asteroids...")
-    cycle1_df_unique = np.unique(cycle1_df["Original_Object_ID"])
-    cycle2_df_unique = np.unique(cycle2_df["Object_ID"])
-    intersect_ids_df = np.intersect1d(cycle1_df_unique, cycle2_df_unique)
-
     # compute all results
     print("find cycle 1 results...")
     cycle1_results_df = find_cycle_asteroids_light_curve_fit(cycle1_df, "Original_Object_ID", 1, cores, core_num)
@@ -69,15 +63,10 @@ def main():
     print("find cycle 2 results...")
     cycle2_results_df = find_cycle_asteroids_light_curve_fit(cycle2_df, "Object_ID", 2, cores, core_num)
 
-    print("comparing cycles...")
-    combine_results_df = compare_cycles(cycle1_results_df, cycle2_results_df, intersect_ids_df)
-
     # convert dataframes to csv
     print("convert results to csv files...")
     cycle1_results_df.to_csv(f'core{core_num}_cycle1_results.csv', index=False)
     cycle2_results_df.to_csv(f'core{core_num}_cycle2_results.csv', index=False)
-    combine_results_df.to_csv(f'core{core_num}_combine_results.csv', index=False)
-
 
 ################################################################################
 # Supporting Functions
@@ -162,40 +151,6 @@ def reduced_chi_square(observed, expected, error):
     chi2 = chi2 / len(observed - 4)
 
     return chi2
-
-# compares cycle1 and cycle2 and compares the amplitude and period of the sine curve
-def compare_cycles(cycle1_df, cycle2_df, intersect_ids):
-
-    columns = ["asteroid_id", "period_(hr)_1", "amplitude_1",    
-               "period_(hr)_2", "amplitude_2"]
-    
-    results_df = pd.DataFrame(columns=columns)
-
-    intersect_ids_df = pd.DataFrame(intersect_ids, columns=["asteroid_id"])
-
-    for row in intersect_ids_df.itertuples(index=False):
-        asteroid_id = row.asteroid_id
-
-        row1 = cycle1_df[cycle1_df["asteroid_id"] == asteroid_id]
-        row2 = cycle2_df[cycle2_df["asteroid_id"] == asteroid_id]
-
-        if row1.empty or row2.empty:
-            continue
-
-        period1 = row1["period_(hr)"].values[0]
-        amplitude1 = row1["amplitude"].values[0]
-        period2 = row2["period_(hr)"].values[0]
-        amplitude2 = row2["amplitude"].values[0]
-
-        results_df.loc[len(results_df)] = [
-            asteroid_id,
-            period1,
-            amplitude1,
-            period2,
-            amplitude2
-        ]
-
-    return results_df
 
 # defines the sine function to fit on the light curve plot
 def sine_function(x, amplitude, frequency, phase, offset):
