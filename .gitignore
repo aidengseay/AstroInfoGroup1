@@ -1,0 +1,9 @@
+# ignore the config file with SECRETS!
+config.ini
+
+# ignore data folders
+Observations/
+ExampleOutput/
+
+# ignore csv files
+*.csv
