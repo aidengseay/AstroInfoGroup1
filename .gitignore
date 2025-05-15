@@ -1,5 +1,10 @@
 # ignore the config file with SECRETS!
 config.ini
 
-# ignore the Observations data folder
+# ignore the data folders
+
+# holds the tess data from MongoDB 
 Observations/
+
+# holds the computed data returned from Monsoon
+MonsoonDataReturn/
