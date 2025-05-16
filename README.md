@@ -53,7 +53,7 @@ Now that we have the data including `cycle num, asteroid_id, reduced_chi2 peak_p
     - Number of Observations < 100
     - Reduced Chi2 Value > 1.5
     - Peak Power < 0.4
-    - Amplitude > 1
+    - Amplitude > 1.0
 
 - The file `AnalyzeLightCurve/GetCycleIntersection.py` intersects both cycle 1 and cycle 2 data into a combined file for easier comparison. In order for this program to work the researcher needs to have `cycle1_results.csv` and `cycle2 results.csv` in the same folder as this program. This will output a file name `cycle_both_results.csv`. This is very similar to `AnalyzeLightCurve/GetCycleIntersectionDetailed.py` which makes a combined csv that is more detailed with all the data collected.
 
