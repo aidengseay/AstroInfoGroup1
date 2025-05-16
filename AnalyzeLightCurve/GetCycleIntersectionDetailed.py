@@ -1,5 +1,5 @@
 ################################################################################
-# Intersect Data
+# Get Cycle Intersection Detailed
 
 """
 Overview: This program takes in cycle1 data and cycle2 data and if asteroid 
