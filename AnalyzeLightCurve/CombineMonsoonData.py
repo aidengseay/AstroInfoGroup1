@@ -38,7 +38,6 @@ def main():
     # initialize results
     dfs_cycle1 = []
     dfs_cycle2 = []
-    dfs_both   = []
 
     # iterate through each core's files
     for i in range(n_cores):
