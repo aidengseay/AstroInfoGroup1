@@ -6,14 +6,13 @@ Goal: Identify interesting **lightcurves** algorithmically.
 
 #
 
-<p align="center">
-    <img src="Other/tess.jpeg">
+<p align="center"><img src="Images/tess.jpeg">
 
 <p align="center"><i>TESS Telescope</i></p>
 
 #
 
-<p align="center"><img src="Other/Object3_lightcurve.png">
+<p align="center"><img src="Images/Object3_lightcurve.png">
 
 <p align="center"><i>Lightcurve for asteroid "Juno"</i></p>
 
@@ -50,14 +49,24 @@ Below are the programs that analyze the data. This is where we get to do the sci
 - The file `AnalyzeLightCurve/CombineMonsoonData.py` takes x amount of output files depending on x amount of scripts that were running on Monsoon and outputs data from each core into one file. For this program to work, the researcher must have a folder called `MonsoonDataReturn` holding all the output files from Monsoon. The program will return `cycle1_results.csv` and `cycle2_results.csv`.
 
 Now that we have the data including `cycle num, asteroid_id, reduced_chi2 peak_power, period_(hr), amplitude, num_observations` from Monsoon, we can start filtering asteroids to find ones that are **interesting**.
-- The file `AnalyzeLightCurve/FilterLightCurveData.ipynb`
+- The file `AnalyzeLightCurve/FilterLightCurveData.ipynb` filters out asteroids that do not have ideal properties. For this program to work data must be in `Data/cycle1_results.csv` and `Data/cycle2_results.csv` in the same folder as this program. Below are the following filters used (throw out data that meets the following below):
+    - Number of Observations < 100
+    - Reduced Chi2 Value > 1.5
+    - Peak Power < 0.4
 
+- The file `AnalyzeLightCurve/GetCycleIntersection.py` intersects both cycle 1 and cycle 2 data into a combined file for easier comparison. In order for this program to work the researcher needs to have `cycle1_results.csv` and `cycle2 results.csv` in the same folder as this program. This will output a file name `cycle_both_results.csv`. This is very similar to `AnalyzeLightCurve/GetCycleIntersectionDetailed.py` which makes a combined csv that is more detailed with all the data collected.
 
+In one week this was able to cut down the number of asteroids to look at down significantly. We used `GrabLightCurve/QueueSingleAsteroid.ipynb` to look at each asteroid individually to find interesting characteristics.
+    
 
 #### Other Code Tools
 
 ##### Queue Single Asteroid
 The file `GrabLightCurve/QueueSingleAsteroid.ipynb` is similar to `FitLightCurve.py`. These files have the same requirements for input but `QueueSingleAsteroid.ipynb` is used for a single asteroid and takes in a single asteroid id. This is really useful for testing specific cases when we filter down potential interesting asteroids.
+
+##### Cycle Comparisons
+The file `AnalyzeLightCurve/CycleComparisons.ipynb` is used to compare values including chi2 values, peak power values, period values, and
+amplitude values. The purpose is to visually see the differences between cycle 1 and cycle 2.
 
 ##### Count Cycle Items
 The file `GrabLightCurve/CountCycleItems.ipynb` was an initial testing file used to count how many asteroids were in each cycle. This also determined how many asteroids where in both cycles. Like `FitLightCurve.py`, `Observations/cycle1.csv` and `Observations/cycle2.csv` must be in the same directory for this program to work.
