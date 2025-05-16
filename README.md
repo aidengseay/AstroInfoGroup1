@@ -4,6 +4,8 @@
 Goal: Identify interesting **lightcurves** algorithmically.
 - Determine if there are any overlapping targets between Cycle 1 and Cycle 2. Compare these targets by their periods and amplitudes.
 
+#
+
 <p align="center">
     <img src="Other/tess.jpeg">
 
@@ -14,6 +16,8 @@ Goal: Identify interesting **lightcurves** algorithmically.
 <p align="center"><img src="Other/Object3_lightcurve.png">
 
 <p align="center"><i>Lightcurve for asteroid "Juno"</i></p>
+
+#
 
 ### Code Workflow
 
